@@ -9,13 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("/login")
 @AllArgsConstructor
 class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     UserVerificationResponse login(@RequestParam String login, @RequestParam String password)
             throws UserNotRegisteredException, PasswordNotCorrectException {

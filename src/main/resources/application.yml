@@ -1,6 +1,6 @@
 spring:
   profiles.active: H2
-  application.name: csm_login
+  application.name: csm-login
   config:
     import:
       - classpath:database.yml
