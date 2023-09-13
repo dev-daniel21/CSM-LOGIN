@@ -1,12 +1,14 @@
 package com.csm.csmlogin.clients;
 
 import com.csm.csmlogin.web.UserRegistrationRequest;
+import com.csm.csmlogin.web.exceptions.ServiceNotAvailableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
@@ -24,8 +26,13 @@ public class UsersClient {
     public boolean verifyUser(String userId, String password) {
 
         String url = String.format("http://localhost:8310/verify?userId=%s&userPassword=%s", userId, password);
+        UserAuthenticationResponse response;
+        try {
+            response = restTemplate.getForObject(url, UserAuthenticationResponse.class);
 
-        UserAuthenticationResponse response = restTemplate.getForObject(url, UserAuthenticationResponse.class);
+        } catch (RestClientException exception) {
+            throw new ServiceNotAvailableException("Authentication service not available");
+        }
         System.out.println(response);
         return response != null && response.userId.equals(userId) && response.isAuthenticated;
     }

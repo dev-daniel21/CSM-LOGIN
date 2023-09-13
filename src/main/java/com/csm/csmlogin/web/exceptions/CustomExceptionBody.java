@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -19,7 +18,7 @@ import java.time.ZoneOffset;
 @ToString
 public class CustomExceptionBody {
 
-//    @JsonIgnore
+    @JsonIgnore
     private Timestamp timeStamp;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssxxx")
@@ -32,7 +31,7 @@ public class CustomExceptionBody {
     private String requestMethod;
 
     public CustomExceptionBody(Timestamp timeStamp, HttpStatus status, String message, HttpServletRequest request) {
-        this.timeStamp = timeStamp;
+
         this.offsetDateTime = timeStamp.toLocalDateTime().atOffset(ZoneOffset.UTC);
         this.statusCode = status.value();
         this.status = status.name();

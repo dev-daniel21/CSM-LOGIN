@@ -1,6 +1,7 @@
 package com.csm.csmlogin.web;
 
 import com.csm.csmlogin.web.exceptions.PasswordNotCorrectException;
+import com.csm.csmlogin.web.exceptions.ServiceNotAvailableException;
 import com.csm.csmlogin.web.exceptions.UserNotRegisteredException;
 import com.csm.csmlogin.service.LoginService;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ class LoginController {
     @GetMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     UserVerificationResponse login(@RequestParam String login, @RequestParam String password)
-            throws UserNotRegisteredException, PasswordNotCorrectException {
+            throws UserNotRegisteredException, PasswordNotCorrectException, ServiceNotAvailableException {
 
         return loginService.authenticateUser(login, password);
     }

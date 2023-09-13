@@ -13,7 +13,11 @@ spring:
 spring:
   config:
     activate.on-profile: H2
-  h2.console.enabled: true
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate.ddl-auto: validate
