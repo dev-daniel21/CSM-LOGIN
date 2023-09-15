@@ -34,7 +34,7 @@ public class LoginService {
                 .orElseThrow(() -> new UserNotRegisteredException(String.format("User %s not found", login)));
 
         if (userAccount.isRegistered()) {
-            if (userVerificationClient.verifyUser(userAccount.getUserId(), password)) {
+            if (userVerificationClient.authenticateUser(userAccount.getUserId(), password)) {
                 return new UserVerificationResponse(String.format("%s authenticated", login));
             } else {
                 throw new PasswordNotCorrectException(String.format("Wrong password provided for user: %s", login));
@@ -44,6 +44,7 @@ public class LoginService {
         }
     }
 
+    @Transactional
     public UserRegistrationResponse registerNewUser(UserRegistrationRequest request) throws UserAlreadyExistsException{
         LoginAuthentication userAccount = loginAuthenticationJPARepository.findByLogin(request.newLogin())
                 .orElse(null);
@@ -58,6 +59,7 @@ public class LoginService {
         }
     }
 
+    @Transactional
     public void deleteUser(String userLogin) {
         if (loginAuthenticationJPARepository.existsByLogin(userLogin)) {
             loginAuthenticationJPARepository.deleteByLogin(userLogin);

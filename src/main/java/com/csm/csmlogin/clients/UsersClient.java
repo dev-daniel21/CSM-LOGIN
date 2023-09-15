@@ -2,6 +2,7 @@ package com.csm.csmlogin.clients;
 
 import com.csm.csmlogin.web.UserRegistrationRequest;
 import com.csm.csmlogin.web.exceptions.ServiceNotAvailableException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,16 +16,12 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UsersClient {
 
     private final RestTemplate restTemplate;
 
-    public UsersClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public boolean verifyUser(String userId, String password) {
-
+    public boolean authenticateUser(String userId, String password) {
         String url = String.format("http://localhost:8310/verify?userId=%s&userPassword=%s", userId, password);
         UserAuthenticationResponse response;
         try {
@@ -42,29 +39,37 @@ public class UsersClient {
                 request.newLogin(), request.userPassword());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", "application/json");
-
-        ResponseEntity<UUID> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                UUID.class,
-                request.newLogin(),
-                request.userPassword());
-
+        ResponseEntity<UUID> response;
+        try {
+            response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    new HttpEntity<>(headers),
+                    UUID.class,
+                    request.newLogin(),
+                    request.userPassword());
+        } catch (RestClientException exception) {
+            throw new ServiceNotAvailableException("Authentication service not available");
+        }
         System.out.println(response.getBody());
         return response.getBody();
     }
 
     public void deleteUser(String userLogin) {
         String url = String.format("http://localhost:8310/deleteUser/userLogin=%s", userLogin);
-
-        restTemplate.delete(url, HttpMethod.DELETE);
+        try {
+            restTemplate.delete(url, HttpMethod.DELETE);
+        } catch (RestClientException exception) {
+            throw new ServiceNotAvailableException("Authentication service not available");
+        }
     }
 
     public void updateUser(String userLogin, UserRegistrationRequest request) {
         String url = String.format("http://localhost:8310/updateUser=%s", userLogin);
-
-        restTemplate.patchForObject(url, request, Void.class, userLogin);
-
+        try {
+            restTemplate.patchForObject(url, request, Void.class, userLogin);
+        } catch (RestClientException exception) {
+            throw new ServiceNotAvailableException("Authentication service not available");
+        }
     }
 }
