@@ -3,6 +3,7 @@ package com.csm.csmlogin.repository;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "login_auth")
@@ -14,8 +15,7 @@ public class LoginAuthentication {
     private Long id;
 
     @Column(name = "user_id")
-    @GenericGenerator(name = "uuid", strategy = "uuid4")
-    private String userId;
+    private UUID userId;
 
     private String login;
 
@@ -24,13 +24,13 @@ public class LoginAuthentication {
     public LoginAuthentication() {
     }
 
-    public LoginAuthentication(String userId, String login, boolean isRegistered) {
+    public LoginAuthentication(UUID userId, String login, boolean isRegistered) {
         this.userId = userId;
         this.login = login;
         this.isRegistered = isRegistered;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 

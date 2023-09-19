@@ -25,12 +25,12 @@ class LoginAuthenticationJPARepositoryTests {
         long count = loginAuthenticationJPARepository.count();
 
         // when
-        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID().toString(), "user2", true));
+        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID(), "user3", true));
 
         // then
         long countAgain = loginAuthenticationJPARepository.count();
-        assertThat(count).isEqualTo(1);
-        assertThat(countAgain).isEqualTo(2);
+        assertThat(count).isEqualTo(2);
+        assertThat(countAgain).isEqualTo(3);
     }
 
     @Test
@@ -40,12 +40,12 @@ class LoginAuthenticationJPARepositoryTests {
         long count = loginAuthenticationJPARepository.count();
 
         // when
-        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID().toString(), "user3", true));
+        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID(), "user4", true));
 
         // then
         long countAgain = loginAuthenticationJPARepository.count();
-        assertThat(count).isEqualTo(2);
-        assertThat(countAgain).isEqualTo(3);
+        assertThat(count).isEqualTo(3);
+        assertThat(countAgain).isEqualTo(4);
     }
     @Test
     @Order(3)
@@ -55,7 +55,7 @@ class LoginAuthenticationJPARepositoryTests {
         long count = loginAuthenticationJPARepository.count();
 
         // when
-        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID().toString(), "user4", true));
+        loginAuthenticationJPARepository.save(new LoginAuthentication(UUID.randomUUID(), "user5", true));
 
         // then
         long countAgain = loginAuthenticationJPARepository.count();

@@ -34,7 +34,7 @@ public class LoginService {
                 .orElseThrow(() -> new UserNotRegisteredException(String.format("User %s not found", login)));
 
         if (userAccount.isRegistered()) {
-            if (userVerificationClient.authenticateUser(userAccount.getUserId(), password)) {
+            if (userVerificationClient.authenticateUser(userAccount.getUserId().toString(), password)) {
                 return new UserVerificationResponse(String.format("%s authenticated", login));
             } else {
                 throw new PasswordNotCorrectException(String.format("Wrong password provided for user: %s", login));
@@ -52,11 +52,20 @@ public class LoginService {
         if (Objects.nonNull(userAccount)) {
             throw new UserAlreadyExistsException("User login is already taken");
         } else {
-            UUID newUserId = userVerificationClient.registerNewUser(request);
-            LoginAuthentication newUserAccount = new LoginAuthentication(newUserId.toString(), request.newLogin(), true);
+            String newUserId = userVerificationClient.registerNewUser(request);
+            LoginAuthentication newUserAccount = new LoginAuthentication(UUID.fromString(newUserId), request.newLogin(), true);
             loginAuthenticationJPARepository.save(newUserAccount);
             return new UserRegistrationResponse(String.format("New user %s registered", request.newLogin()));
         }
+    }
+
+    @Transactional
+    public void updateUser(String userLogin, UserRegistrationRequest request) {
+        if (loginAuthenticationJPARepository.existsByLogin(userLogin)) {
+            loginAuthenticationJPARepository.updateUser(userLogin, request.newLogin());
+            userVerificationClient.updateUser(userLogin, request);
+        }
+
     }
 
     @Transactional
@@ -67,11 +76,4 @@ public class LoginService {
         }
     }
 
-    @Transactional
-    public void updateUser(String userLogin, UserRegistrationRequest request) {
-        if (loginAuthenticationJPARepository.existsByLogin(userLogin)) {
-            loginAuthenticationJPARepository.updateUser(userLogin, request.newLogin());
-            userVerificationClient.updateUser(userLogin, request);
-        }
-    }
 }

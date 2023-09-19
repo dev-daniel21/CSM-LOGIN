@@ -17,13 +17,13 @@ class CsmLoginApplicationTests {
     LoginAuthenticationJPARepository loginAuthenticationJPARepository;
 
 	@Test
-	void should_find_one_user_in_database() {
+	void should_find_two_users_in_database() {
 		// given
 		// when
 		long count = loginAuthenticationJPARepository.count();
 
 		// then
-		assertThat(count).isEqualTo(1);
+		assertThat(count).isEqualTo(2);
 	}
 
 	@Test

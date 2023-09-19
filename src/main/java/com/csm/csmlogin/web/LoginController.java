@@ -31,18 +31,18 @@ class LoginController {
         return loginService.registerNewUser(request);
     }
 
+    @PutMapping("/updateUser")
+    @ResponseStatus(HttpStatus.CREATED)
+    void updateUser(@RequestParam String userLogin, @RequestBody UserRegistrationRequest request) {
+
+        loginService.updateUser(userLogin, request);
+    }
+
     @DeleteMapping("/deleteUser")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteUser(@RequestParam String userLogin) {
 
         loginService.deleteUser(userLogin);
-    }
-
-    @PatchMapping("/updateUser")
-    @ResponseStatus(HttpStatus.CREATED)
-    void updateUser(@RequestParam String userLogin, @RequestBody UserRegistrationRequest request) {
-
-        loginService.updateUser(userLogin, request);
     }
 
 }

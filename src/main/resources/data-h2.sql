@@ -1,1 +1,2 @@
 INSERT INTO login_auth (is_registered, login, user_id) VALUES (true, 'user1', '9ea220bd-54ac-4633-a271-89e59c36e161');
+INSERT INTO login_auth (is_registered, login, user_id) VALUES (true, 'user2', '3a24960d-a9ac-4ebb-a506-22120e8bc717');
